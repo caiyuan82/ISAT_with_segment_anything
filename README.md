@@ -30,6 +30,12 @@ Demo Video：[youtube](https://www.youtube.com/watch?v=yLdZCPmX-Bc)
 ```shell
 conda create -n ISAT_with_segment_anything python==3.8
 conda activate ISAT_with_segment_anything
+pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1+cu113 -f https://download.pytorch.org/whl/torch_stable.html
+# pycocotools需要编译，安装msvc编译工具
+# 安装visualStudio Installer
+# 选择Windows 10/11 SDK
+# 选择MSVC v143
+# 选择“用于Windows 的C++ CMake工具”
 ```
 
 ### (2) 安装ISAT_with_segment_anything

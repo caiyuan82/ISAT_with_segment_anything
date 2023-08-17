@@ -314,6 +314,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.set_saved_state(True)
 
     def show_image(self, index:int):
+        
+        self.actionSave.trigger()
+        
         self.reset_action()
         self.current_label = None
         self.load_finished = False

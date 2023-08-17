@@ -1,25 +1,71 @@
-contour_mode: external
+contour_mode: max_only
 label:
 - color: '#000000'
   name: __background__
+- color: '#ff00ff'
+  name: unknown
 - color: '#ef2929'
-  name: person
+  name: aba
+- color: '#ff5500'
+  name: cns
+- color: '#00aaff'
+  name: "cst \u7EB9\u5E26"
 - color: '#fcaf3e'
-  name: knife
+  name: ecl
+- color: '#5500ff'
+  name: eae
 - color: '#fce94f'
-  name: fork
+  name: eco
 - color: '#8ae234'
-  name: cup
+  name: efa
 - color: '#729fcf'
-  name: giraffe
+  name: efm
+- color: '#aaff7f'
+  name: hin
 - color: '#ad7fa8'
-  name: plate
+  name: kae
 - color: '#e9b96e'
-  name: table
+  name: kox
 - color: '#a40000'
-  name: cake
+  name: kpn
 - color: '#5c3566'
-  name: fence
-language: en
-mask_alpha: 0.4
+  name: lisite
+- color: '#55ffff'
+  name: mmo
+- color: '#00aa7f'
+  name: pae
+- color: '#ff5500'
+  name: pma
+- color: '#55ffff'
+  name: pmi
+- color: '#550000'
+  name: sau
+- color: '#ffaaff'
+  name: sma
+- color: '#ffaaff'
+  name: yeast
+- color: '#ffff00'
+  name: "\u5F17\u52B3\u5730"
+- color: '#00aa00'
+  name: "\u8FD1\u5E73\u6ED1"
+- color: '#ff007f'
+  name: "\u54BD\u5CE1\u708E\u94FE\u7403\u83CC"
+- color: '#ff55ff'
+  name: "\u53D8\u5F62"
+- color: '#5555ff'
+  name: "\u8349\u94FE"
+- color: '#5500ff'
+  name: "\u9E51\u9E21\u80A0\u7403\u83CC"
+- color: '#ffff7f'
+  name: "\u591A\u98DF\u535A\u5BA2\u970D\u5C14\u5FB7"
+- color: '#55ff7f'
+  name: "\u514B\u5415\u6C83\u83CC"
+- color: '#ffaa7f'
+  name: "\u96F7\u6C0F\u666E\u7F57\u7EF4\u767B\u83CC"
+- color: '#55aa7f'
+  name: "\u6C99\u95E8\u83CC"
+- color: '#ff557f'
+  name: "\u7C98\u91D1\u9EC4\u6746\u83CC"
+language: zh
+mask_alpha: 0.5
 vertex_size: 2
