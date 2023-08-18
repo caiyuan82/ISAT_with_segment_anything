@@ -608,6 +608,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         save_config(self.cfg, config_file)
 
     def exit(self):
+        self.actionSave.trigger()
         self.save_cfg(self.config_file)
         self.close()
 
