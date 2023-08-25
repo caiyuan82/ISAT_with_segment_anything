@@ -4,9 +4,13 @@
 import os
 from PIL import Image
 import numpy as np
-from json import load, dump
+from json import load, dump, dumps
 from typing import List
-
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from label_mgr import LabelMgr
+import json
 
 class Object:
     def __init__(self, category:str, group:int, segmentation, area, layer, bbox, iscrowd=0, note=''):
@@ -28,6 +32,7 @@ class Annotation:
         self.img_name = img_name
         self.label_path = label_path
         self.note = ''
+        self.label_mgr = LabelMgr()
 
         image = np.array(Image.open(image_path))
         if image.ndim == 3:
@@ -44,56 +49,56 @@ class Annotation:
 
     def load_annotation(self):
         if os.path.exists(self.label_path):
-            with open(self.label_path, 'r') as f:
-                dataset = load(f)
-                info = dataset.get('info', {})
-                description = info.get('description', '')
-                if description == 'ISAT':
-                    # ISAT格式json
-                    objects = dataset.get('objects', [])
-                    self.img_name = info.get('name', '')
-                    width = info.get('width', None)
-                    if width is not None:
-                        self.width = width
-                    height = info.get('height', None)
-                    if height is not None:
-                        self.height = height
-                    depth = info.get('depth', None)
-                    if depth is not None:
-                        self.depth = depth
-                    self.note = info.get('note', '')
-                    for obj in objects:
-                        category = obj.get('category', 'unknow')
-                        group = obj.get('group', 0)
-                        if group is None: group = 0
-                        segmentation = obj.get('segmentation', [])
-                        iscrowd = obj.get('iscrowd', 0)
-                        note = obj.get('note', '')
-                        area = obj.get('area', 0)
-                        layer = obj.get('layer', 2)
-                        bbox = obj.get('bbox', [])
-                        obj = Object(category, group, segmentation, area, layer, bbox, iscrowd, note)
-                        self.objects.append(obj)
-                else:
-                    # labelme格式json
-                    print('Warning: Load LabelMe formate json.')
-                    shapes = dataset.get('shapes', {})
-                    for shape in shapes:
-                        # 只加载多边形
-                        is_polygon = shape.get('shape_type', '') == 'polygon'
-                        if not is_polygon:
-                            continue
-                        category = shape.get('label', 'unknow')
-                        group = shape.get('group_id', 0)
-                        if group is None: group = ''
-                        segmentation = shape.get('points', [])
-                        iscrowd = shape.get('iscrowd', 0)
-                        note = shape.get('note', '')
-                        area = shape.get('area', 0)
-                        layer = shape.get('layer', 2)
-                        bbox = shape.get('bbox', [])
-                        obj = Object(category, group, segmentation, area, layer, bbox, iscrowd, note)
-                        self.objects.append(obj)
+            json_string = self.label_mgr.read(self.label_path)
+            dataset = json.loads(json_string)
+            info = dataset.get('info', {})
+            description = info.get('description', '')
+            if description == 'ISAT':
+                # ISAT格式json
+                objects = dataset.get('objects', [])
+                self.img_name = info.get('name', '')
+                width = info.get('width', None)
+                if width is not None:
+                    self.width = width
+                height = info.get('height', None)
+                if height is not None:
+                    self.height = height
+                depth = info.get('depth', None)
+                if depth is not None:
+                    self.depth = depth
+                self.note = info.get('note', '')
+                for obj in objects:
+                    category = obj.get('category', 'unknow')
+                    group = obj.get('group', 0)
+                    if group is None: group = 0
+                    segmentation = obj.get('segmentation', [])
+                    iscrowd = obj.get('iscrowd', 0)
+                    note = obj.get('note', '')
+                    area = obj.get('area', 0)
+                    layer = obj.get('layer', 2)
+                    bbox = obj.get('bbox', [])
+                    obj = Object(category, group, segmentation, area, layer, bbox, iscrowd, note)
+                    self.objects.append(obj)
+            else:
+                # labelme格式json
+                print('Warning: Load LabelMe formate json.')
+                shapes = dataset.get('shapes', {})
+                for shape in shapes:
+                    # 只加载多边形
+                    is_polygon = shape.get('shape_type', '') == 'polygon'
+                    if not is_polygon:
+                        continue
+                    category = shape.get('label', 'unknow')
+                    group = shape.get('group_id', 0)
+                    if group is None: group = ''
+                    segmentation = shape.get('points', [])
+                    iscrowd = shape.get('iscrowd', 0)
+                    note = shape.get('note', '')
+                    area = shape.get('area', 0)
+                    layer = shape.get('layer', 2)
+                    bbox = shape.get('bbox', [])
+                    obj = Object(category, group, segmentation, area, layer, bbox, iscrowd, note)
+                    self.objects.append(obj)
 
     def save_annotation(self):
         dataset = {}
@@ -117,6 +122,6 @@ class Annotation:
             object['iscrowd'] = obj.iscrowd
             object['note'] = obj.note
             dataset['objects'].append(object)
-        with open(self.label_path, 'w') as f:
-            dump(dataset, f, indent=4)
+        jsonString = json.dumps(dataset, indent=4)
+        self.label_mgr.write(self.label_path, jsonString)  
         return True

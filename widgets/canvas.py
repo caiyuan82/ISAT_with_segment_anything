@@ -190,6 +190,9 @@ class AnnotationScene(QtWidgets.QGraphicsScene):
                     # 当只保留外轮廓或单个mask时，只检测外轮廓
                     contours, hierarchy = cv2.findContours(masks, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_TC89_KCOS)
 
+                if len(contours) < 1:
+                    return
+
                 if self.contour_mode == CONTOURMode.SAVE_MAX_ONLY:
                     contour = contours[0]
                     for cont in contours:

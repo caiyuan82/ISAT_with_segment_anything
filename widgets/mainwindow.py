@@ -366,7 +366,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.can_be_annotated:
                 self.current_group = 1
                 _, name = os.path.split(file_path)
-                label_path = os.path.join(self.label_root, '.'.join(name.split('.')[:-1]) + '.json')
+                label_path = os.path.join(self.label_root, '.'.join(name.split('.')[:-1]) + '.bin')
                 self.current_label = Annotation(file_path, label_path)
                 # 载入数据
                 self.current_label.load_annotation()
