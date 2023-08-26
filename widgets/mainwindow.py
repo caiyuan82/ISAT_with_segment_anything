@@ -283,9 +283,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.image_root = dir
         self.actionOpen_dir.setStatusTip("Image root: {}".format(self.image_root))
-        if self.label_root is None:
-            self.label_root = dir
-            self.actionSave_dir.setStatusTip("Label root: {}".format(self.label_root))
+        #if self.label_root is None:
+        self.label_root = dir
+        self.actionSave_dir.setStatusTip("Label root: {}".format(self.label_root))
 
         self.show_image(self.current_index)
 
@@ -312,10 +312,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # 保存标注文件的同时保存一份isat配置文件
         self.save_cfg(os.path.join(self.label_root, 'isat.yaml'))
         self.set_saved_state(True)
+        print('Save annotation file: {}'.format(self.current_label.label_path))
 
     def show_image(self, index:int):
         
-        self.actionSave.trigger()
+        if not self.saved:
+            self.actionSave.trigger()
         
         self.reset_action()
         self.current_label = None
@@ -608,7 +610,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         save_config(self.cfg, config_file)
 
     def exit(self):
-        self.actionSave.trigger()
+        if not self.saved:
+            self.actionSave.trigger()
         self.save_cfg(self.config_file)
         self.close()
 

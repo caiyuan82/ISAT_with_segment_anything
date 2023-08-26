@@ -1,4 +1,4 @@
-import ctypes
+import ctypes, os
 from ctypes import c_char_p, c_int, c_void_p, POINTER
 
 class LabelMgr:
@@ -19,6 +19,9 @@ class LabelMgr:
         self.isat_free_buf = self.your_lib.isat_free_buf
         self.isat_free_buf.argtypes = [c_void_p]
         self.isat_free_buf.restype = None
+        
+        self.your_lib.isat_set_path.argtypes = [c_char_p]
+        self.your_lib.isat_set_path(os.getcwd().encode('utf-8'))
     
     def write(self, file_name, data):
         result = self.isat_write(file_name.encode('utf-8'), data.encode('utf-8'), len(data))
