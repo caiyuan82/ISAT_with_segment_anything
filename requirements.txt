@@ -5,3 +5,4 @@ PyQt5==5.15.7
 PyYAML==6.0
 pycocotools
 timm
+cryptography
